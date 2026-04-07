@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-[#f2f2f7] flex justify-center min-h-screen antialiased text-black;
+  }
+  #root {
+    @apply w-full max-w-[430px] bg-[#f2f2f7] min-h-screen relative shadow-lg;
+  }
+}
