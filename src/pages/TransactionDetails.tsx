@@ -1,18 +1,18 @@
 import { useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import data from '../data/transactions.json';
+import { useTransactions } from '../hooks/useTransactions';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
 import { formatTransactionDate } from '../utils/dateFormat';
-import type { Transaction } from '../types/transaction';
-
-const transactions: Transaction[] = data;
 
 export default function TransactionDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { transactions, loading, error } = useTransactions();
   
   const transaction = useMemo(
     () => transactions.find(t => t.id === Number(id)),
-    [id]
+    [transactions, id]
   );
 
   const formattedDate = useMemo(
@@ -24,12 +24,27 @@ export default function TransactionDetails() {
     void navigate(-1);
   }, [navigate]);
 
+  if (loading) {
+    return <LoadingSpinner message="Loading transaction..." />;
+  }
+
+  if (error) {
+    return (
+      <ErrorMessage 
+        message={error.message} 
+        title="Failed to load transaction" 
+        onBack={handleBack}
+      />
+    );
+  }
+
   if (!transaction) {
     return (
-      <div className="w-full max-w-[430px] mx-auto p-6">
-        <p>Transaction not found.</p>
-        <button onClick={handleBack} className="text-blue-600 underline">Back</button>
-      </div>
+      <ErrorMessage 
+        message="The transaction you're looking for doesn't exist." 
+        title="Transaction not found" 
+        onBack={handleBack}
+      />
     );
   }
 
