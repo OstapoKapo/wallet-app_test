@@ -1,7 +1,8 @@
+import { memo, useMemo } from 'react';
 import { calculateDailyPoints } from '../utils/pointsCalculator';
 
-export const DailyPointsBlock = () => {
-  const points = calculateDailyPoints(new Date());
+export const DailyPointsBlock = memo(() => {
+  const points = useMemo(() => calculateDailyPoints(new Date()), []);
 
   return (
     <div className="bg-white rounded-xl p-3 flex flex-col justify-center">
@@ -9,4 +10,6 @@ export const DailyPointsBlock = () => {
       <p className="text-[#8e8e93]">{points}</p>
     </div>
   );
-};
+});
+
+DailyPointsBlock.displayName = 'DailyPointsBlock';

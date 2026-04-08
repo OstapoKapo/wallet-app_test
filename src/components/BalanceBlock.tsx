@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
 const generateBalance = (): { balance: string; available: string } => {
   const balanceValue = (Math.random() * 1500).toFixed(2);
@@ -6,7 +6,7 @@ const generateBalance = (): { balance: string; available: string } => {
   return { balance: balanceValue, available: availableValue };
 };
 
-export const BalanceBlock = () => {
+export const BalanceBlock = memo(() => {
   const [{ balance, available }] = useState(generateBalance);
 
   return (
@@ -16,4 +16,6 @@ export const BalanceBlock = () => {
       <p className="text-[#8e8e93] text-[15px] my-0">${available} Available</p>
     </div>
   );
-};
+});
+
+BalanceBlock.displayName = 'BalanceBlock';
