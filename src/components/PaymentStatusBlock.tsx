@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { Check } from "lucide-react";
 
-export const PaymentStatusBlock = () => {
+export const PaymentStatusBlock = memo(() => {
   return (
     <div className="bg-white rounded-xl p-3 flex flex-col justify-between h-full shadow-sm">
       <div className="flex flex-col gap-1">
@@ -19,4 +20,6 @@ export const PaymentStatusBlock = () => {
       </div>
     </div>
   );
-};
+});
+
+PaymentStatusBlock.displayName = 'PaymentStatusBlock';

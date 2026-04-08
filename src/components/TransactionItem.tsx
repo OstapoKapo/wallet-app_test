@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, CreditCard, ShoppingBag } from 'lucide-react';
 import type { Transaction } from '../types/transaction';
@@ -8,14 +9,21 @@ interface Props {
   isLast?: boolean;
 }
 
-export const TransactionItem = ({ transaction, isLast }: Props) => {
-  let iconBg = 'bg-[#333]';
-  if (transaction.name === 'Payment') iconBg = 'bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600';
-  if (transaction.name === 'IKEA') iconBg = 'bg-[#0058a3]';
-  if (transaction.name === 'Target') iconBg = 'bg-[#cc0000]';
+export const TransactionItem = memo(({ transaction, isLast }: Props) => {
+  const iconBg = useMemo(() => {
+    if (transaction.name === 'Payment') return 'bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600';
+    if (transaction.name === 'IKEA') return 'bg-[#0058a3]';
+    if (transaction.name === 'Target') return 'bg-[#cc0000]';
+    return 'bg-[#333]';
+  }, [transaction.name]);
+
+  const formattedDate = useMemo(
+    () => formatTransactionDate(transaction.date),
+    [transaction.date]
+  );
 
   return (
-    <Link to={`/transaction/${transaction.id}`} className="block active:bg-gray-100 transition-colors">
+    <Link to={`/transaction/${String(transaction.id)}`} className="block active:bg-gray-100 transition-colors">
       <div className={`flex items-center justify-between p-3 ${!isLast ? 'border-b border-[#e5e5ea]' : ''}`}>
         
         <div className="flex items-center gap-3 min-w-0">
@@ -40,7 +48,7 @@ export const TransactionItem = ({ transaction, isLast }: Props) => {
               {transaction.description}
             </span>
             <span className="text-[#8e8e93] text-[13px] leading-tight">
-              {transaction.authorizedUser ? `${transaction.authorizedUser} — ` : ''}{formatTransactionDate(transaction.date)}
+              {transaction.authorizedUser ? `${transaction.authorizedUser} — ` : ''}{formattedDate}
             </span>
           </div>
         </div>
@@ -62,4 +70,6 @@ export const TransactionItem = ({ transaction, isLast }: Props) => {
       </div>
     </Link>
   );
-};
+});
+
+TransactionItem.displayName = 'TransactionItem';
