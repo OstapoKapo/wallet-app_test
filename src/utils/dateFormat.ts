@@ -9,7 +9,7 @@ export function formatTransactionDate(dateStr: string): string {
   startOfWeek.setHours(0, 0, 0, 0);
 
   if (date >= startOfWeek) {
-    return date.toLocaleDateString('en-US', { weekday: 'long' }) + ', ' + date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    return date.toLocaleDateString('en-US', { weekday: 'long' });
   }
-  return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' }) + ', ' + date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  return date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: '2-digit' });
 }

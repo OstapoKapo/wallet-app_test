@@ -1,43 +1,43 @@
 export const calculateDailyPoints = (date: Date): string => {
-  const currentMonth = date.getMonth();
-
-  
-  const seasonStartMonths = [2, 5, 8, 11];
-  
- 
-  let startMonth = 11; 
-  for (let i = 0; i < seasonStartMonths.length; i++) {
-    if (currentMonth >= seasonStartMonths[i]) {
-      startMonth = seasonStartMonths[i];
-    }
-  }
-
+  const currentMonth = date.getMonth(); 
   const year = date.getFullYear();
-  const seasonStartDate = new Date(year, startMonth, 1);
-  
-  if (currentMonth < 2 && startMonth === 11) {
-    seasonStartDate.setFullYear(year - 1);
+
+  let startMonth = 11; 
+  if (currentMonth >= 2 && currentMonth <= 4) {
+    startMonth = 2; 
+  } else if (currentMonth >= 5 && currentMonth <= 7) {
+    startMonth = 5;
+  } else if (currentMonth >= 8 && currentMonth <= 10) {
+    startMonth = 8; 
   }
 
-  const diffInMs = date.getTime() - seasonStartDate.getTime();
-  const dayOfSeason = Math.floor(diffInMs / (1000 * 60 * 60 * 24)) + 1;
+  const startYear = currentMonth < 2 ? year - 1 : year;
+
+  const seasonStart = Date.UTC(startYear, startMonth, 1);
+  const targetDate = Date.UTC(year, currentMonth, date.getDate());
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const diffInDays = Math.floor((targetDate - seasonStart) / msPerDay);
+  const dayOfSeason = diffInDays + 1;
 
   if (dayOfSeason === 1) return "2";
   if (dayOfSeason === 2) return "3";
 
-  let p2 = 2; 
-  let p1 = 3; 
-  let current = 0;
+  let prev2 = 2;
+  let prev1 = 3; 
+  let currentPoints = 0;
 
   for (let i = 3; i <= dayOfSeason; i++) {
-    current = Math.round(p2 * 1.0 + p1 * 0.6);
-    p2 = p1;
-    p1 = current;
+    currentPoints = prev2 + (prev1 * 0.6);
+    prev2 = prev1;
+    prev1 = currentPoints;
   }
 
-  if (current >= 1000) {
-    return `${String(Math.round(current / 1000))}K`;
+  const finalPoints = Math.round(currentPoints);
+
+  if (finalPoints >= 1000) {
+    return String(Math.round(finalPoints / 1000)) + 'K';
   }
 
-  return String(current);
+  return String(finalPoints);
 };
