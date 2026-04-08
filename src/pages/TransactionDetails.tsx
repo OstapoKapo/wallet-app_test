@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTransactions } from '../hooks/useTransactions';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
 import { formatTransactionDate } from '../utils/dateFormat';
 
 export default function TransactionDetails() {
@@ -23,31 +25,26 @@ export default function TransactionDetails() {
   }, [navigate]);
 
   if (loading) {
-    return (
-      <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] flex items-center justify-center">
-        <div className="text-xl font-semibold">Loading...</div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading transaction..." />;
   }
 
   if (error) {
     return (
-      <div className="w-full max-w-[430px] mx-auto p-6">
-        <div className="text-center">
-          <div className="text-xl font-semibold text-red-600">Error loading transaction</div>
-          <p className="text-sm text-gray-600 mt-2">{error.message}</p>
-          <button onClick={handleBack} className="mt-4 text-blue-600 underline">Back</button>
-        </div>
-      </div>
+      <ErrorMessage 
+        message={error.message} 
+        title="Failed to load transaction" 
+        onBack={handleBack}
+      />
     );
   }
 
   if (!transaction) {
     return (
-      <div className="w-full max-w-[430px] mx-auto p-6">
-        <p>Transaction not found.</p>
-        <button onClick={handleBack} className="text-blue-600 underline">Back</button>
-      </div>
+      <ErrorMessage 
+        message="The transaction you're looking for doesn't exist." 
+        title="Transaction not found" 
+        onBack={handleBack}
+      />
     );
   }
 

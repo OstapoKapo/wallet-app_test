@@ -3,7 +3,10 @@ import { BalanceBlock } from '../components/BalanceBlock';
 import { DailyPointsBlock } from '../components/DailyPointsBlock';
 import { PaymentStatusBlock } from '../components/PaymentStatusBlock';
 import { TransactionItem } from '../components/TransactionItem';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ErrorMessage } from '../components/ErrorMessage';
 import { useTransactions } from '../hooks/useTransactions';
+import type { Transaction } from '../types/transaction';
 
 const TransactionsList = () => {
   const { transactions, loading, error } = useTransactions();
@@ -14,24 +17,11 @@ const TransactionsList = () => {
   );
 
   if (loading) {
-    return (
-      <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] pt-6 pb-8 px-4 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-xl font-semibold">Loading...</div>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading transactions..." />;
   }
 
   if (error) {
-    return (
-      <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] pt-6 pb-8 px-4 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-xl font-semibold text-red-600">Error loading transactions</div>
-          <p className="text-sm text-gray-600 mt-2">{error.message}</p>
-        </div>
-      </div>
-    );
+    return <ErrorMessage message={error.message} title="Failed to load transactions" />;
   }
 
   return (
@@ -50,7 +40,7 @@ const TransactionsList = () => {
       <h2 className="font-bold text-2xl mx-4 mb-3 mt-2">Latest Transactions</h2>
       <div className="bg-white rounded-2xl shadow-sm mx-4 p-0 overflow-hidden">
         {latestTransactions.length > 0 ? (
-          latestTransactions.map((t, i, arr) => (
+          latestTransactions.map((t: Transaction, i: number, arr: Transaction[]) => (
             <TransactionItem key={t.id} transaction={t} isLast={i === arr.length - 1} />
           ))
         ) : (
