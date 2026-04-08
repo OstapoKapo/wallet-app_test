@@ -8,6 +8,10 @@ A pixel-perfect React + Vite wallet dashboard with transaction list and details,
 - Transaction details page (with smart date formatting)
 - Responsive, iOS-inspired design
 - TypeScript, React Router, Tailwind CSS
+- Custom hooks with fetch API for data management
+- React.memo optimization for performance
+- Reusable Loading & Error components
+
 
 ## Screenshots
 
