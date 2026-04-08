@@ -26,6 +26,10 @@ export default function TransactionDetails() {
     void navigate(-1);
   }, [navigate]);
 
+  const handleBack = () => {
+    void navigate(-1);
+  };
+
   if (!transaction) {
     return (
       <div className="w-full max-w-[430px] mx-auto p-6">

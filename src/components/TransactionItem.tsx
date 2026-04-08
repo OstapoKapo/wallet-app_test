@@ -56,9 +56,9 @@ export const TransactionItem = memo(({ transaction, isLast }: Props) => {
         <div className="flex items-center gap-2 shrink-0 ml-2">
           <div className="flex flex-col items-end">
             <span className="font-semibold text-[16px] text-black">
-              {transaction.type === 'Payment' ? `+` : ''}${transaction.amount.toFixed(2)}
+              {transaction.type === 'Payment' ? '+' : ''}${transaction.amount.toFixed(2)}
             </span>
-            {transaction.percentage && (
+            {transaction.percentage !== undefined && (
               <span className="text-[10px] bg-[#f2f2f7] text-[#8e8e93] px-1 rounded font-bold mt-0.5">
                 {transaction.percentage}
               </span>
