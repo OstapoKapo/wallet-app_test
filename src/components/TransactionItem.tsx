@@ -15,7 +15,7 @@ export const TransactionItem = ({ transaction, isLast }: Props) => {
   if (transaction.name === 'Target') iconBg = 'bg-[#cc0000]';
 
   return (
-    <Link to={`/transaction/${transaction.id}`} className="block active:bg-gray-100 transition-colors">
+    <Link to={`/transaction/${String(transaction.id)}`} className="block active:bg-gray-100 transition-colors">
       <div className={`flex items-center justify-between p-3 ${!isLast ? 'border-b border-[#e5e5ea]' : ''}`}>
         
         <div className="flex items-center gap-3 min-w-0">
@@ -48,9 +48,9 @@ export const TransactionItem = ({ transaction, isLast }: Props) => {
         <div className="flex items-center gap-2 shrink-0 ml-2">
           <div className="flex flex-col items-end">
             <span className="font-semibold text-[16px] text-black">
-              {transaction.type === 'Payment' ? `+` : ''}${transaction.amount.toFixed(2)}
+              {transaction.type === 'Payment' ? '+' : ''}${transaction.amount.toFixed(2)}
             </span>
-            {transaction.percentage && (
+            {transaction.percentage !== undefined && (
               <span className="text-[10px] bg-[#f2f2f7] text-[#8e8e93] px-1 rounded font-bold mt-0.5">
                 {transaction.percentage}
               </span>

@@ -36,8 +36,8 @@ export const calculateDailyPoints = (date: Date): string => {
   }
 
   if (current >= 1000) {
-    return Math.round(current / 1000) + "K";
+    return `${String(Math.round(current / 1000))}K`;
   }
 
-  return current.toString();
+  return String(current);
 };
