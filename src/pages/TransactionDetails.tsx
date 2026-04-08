@@ -1,8 +1,6 @@
-
 import { useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import data from '../data/transactions.json';
-
 import { formatTransactionDate } from '../utils/dateFormat';
 import type { Transaction } from '../types/transaction';
 
@@ -25,10 +23,6 @@ export default function TransactionDetails() {
   const handleBack = useCallback(() => {
     void navigate(-1);
   }, [navigate]);
-
-  const handleBack = () => {
-    void navigate(-1);
-  };
 
   if (!transaction) {
     return (
