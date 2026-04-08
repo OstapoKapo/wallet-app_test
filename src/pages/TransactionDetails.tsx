@@ -1,18 +1,16 @@
 import { useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import data from '../data/transactions.json';
+import { useTransactions } from '../hooks/useTransactions';
 import { formatTransactionDate } from '../utils/dateFormat';
-import type { Transaction } from '../types/transaction';
-
-const transactions: Transaction[] = data;
 
 export default function TransactionDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { transactions, loading, error } = useTransactions();
   
   const transaction = useMemo(
     () => transactions.find(t => t.id === Number(id)),
-    [id]
+    [transactions, id]
   );
 
   const formattedDate = useMemo(
@@ -23,6 +21,26 @@ export default function TransactionDetails() {
   const handleBack = useCallback(() => {
     void navigate(-1);
   }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] flex items-center justify-center">
+        <div className="text-xl font-semibold">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full max-w-[430px] mx-auto p-6">
+        <div className="text-center">
+          <div className="text-xl font-semibold text-red-600">Error loading transaction</div>
+          <p className="text-sm text-gray-600 mt-2">{error.message}</p>
+          <button onClick={handleBack} className="mt-4 text-blue-600 underline">Back</button>
+        </div>
+      </div>
+    );
+  }
 
   if (!transaction) {
     return (

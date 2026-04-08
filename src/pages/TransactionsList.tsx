@@ -3,17 +3,36 @@ import { BalanceBlock } from '../components/BalanceBlock';
 import { DailyPointsBlock } from '../components/DailyPointsBlock';
 import { PaymentStatusBlock } from '../components/PaymentStatusBlock';
 import { TransactionItem } from '../components/TransactionItem';
-
-import type { Transaction } from '../types/transaction';
-import data from '../data/transactions.json';
-
-const transactions: Transaction[] = data;
+import { useTransactions } from '../hooks/useTransactions';
 
 const TransactionsList = () => {
+  const { transactions, loading, error } = useTransactions();
+
   const latestTransactions = useMemo(
     () => transactions.slice(0, 10),
-    []
+    [transactions]
   );
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] pt-6 pb-8 px-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-xl font-semibold">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] pt-6 pb-8 px-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-xl font-semibold text-red-600">Error loading transactions</div>
+          <p className="text-sm text-gray-600 mt-2">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-[430px] min-h-screen mx-auto bg-[#f2f2f7] pt-6 pb-8 px-0 shadow-lg rounded-2xl">
@@ -30,9 +49,15 @@ const TransactionsList = () => {
 
       <h2 className="font-bold text-2xl mx-4 mb-3 mt-2">Latest Transactions</h2>
       <div className="bg-white rounded-2xl shadow-sm mx-4 p-0 overflow-hidden">
-        {latestTransactions.map((t, i, arr) => (
-          <TransactionItem key={t.id} transaction={t} isLast={i === arr.length - 1} />
-        ))}
+        {latestTransactions.length > 0 ? (
+          latestTransactions.map((t, i, arr) => (
+            <TransactionItem key={t.id} transaction={t} isLast={i === arr.length - 1} />
+          ))
+        ) : (
+          <div className="p-6 text-center text-gray-500">
+            No transactions found
+          </div>
+        )}
       </div>
     </div>
   );
